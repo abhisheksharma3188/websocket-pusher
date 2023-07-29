@@ -11,9 +11,9 @@ require __DIR__ . '/vendor/autoload.php';
 $username=$_POST['username_input'];
 $message=$_POST['message_input'];
 
-$pusher = new Pusher\Pusher("1d2dbaa7e24fbbc414ff", "3534bc33c3858bfb927d", "1643052", array('cluster' => 'ap2'));
+$pusher = new Pusher\Pusher("APP_KEY", "APP_SECRET", "APP_ID", array('cluster' => 'APP_CLUSTER'));
 
-$pusher->trigger('pusher_chat_app', 'my-event', array('username'=>$username,'message' => $message));
+$pusher->trigger('my-channel', 'my-event', array('username'=>$username,'message' => $message));
 
 /////////////////////// custom code to give response in json below /////////////////////////////////////////
 /*$response_array=['response'=>'success','message'=>'message sent successfully'];
