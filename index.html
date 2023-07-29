@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pusher Websocket Chat</title>
+</head>
+<body>
+
+    <h1 style="text-align:center">Simple Chat</h1>
+    <form id="send_message_form" style="width:100%;max-width:500px;margin:20px auto 20px auto;text-align:center;">
+        <input type="text" name="username_input" placeholder="Enter Username" style="width:100%;"><br><br>
+        <input type="text" id="message_input" name="message_input" placeholder="Enter Message" style="width:100%;"><br><br>
+        <button>Send</button>
+    </form>
+    <div id="message_div" style="width:100%;max-width:500px;height:500px;overflow-y:scroll;margin:20px auto 20px auto;border:1px solid black;">
+
+    </div>
+    
+    <script src="https://js.pusher.com/8.0.1/pusher.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+    <script>
+
+        ///////////////////// code to create pusher object below /////////////////////////////
+        var pusher = new Pusher("1d2dbaa7e24fbbc414ff", {
+        cluster: "ap2",
+        });
+        ///////////////////// code to create pusher object above /////////////////////////////
+
+        ///////////////////// pusher method to subscribe channel below /////////////////////////////
+        var channel = pusher.subscribe("pusher_chat_app");
+        ///////////////////// pusher method to subscribe channel above /////////////////////////////
+
+        ///////////////////// pusher method to read incoming messages below /////////////////////////////
+        channel.bind("my-event", (data) => {
+            // Method to be dispatched on trigger.
+            console.log(data);
+            var html_code=`<div style="margin:20px 20px 20px 20px"><span style="font-weight:bold;">${data.username} : </span><span style="font-style:italic">${data.message}</span></div>`;
+            document.getElementById('message_div').insertAdjacentHTML("beforeend",html_code);
+            document.getElementById('message_div').scrollTop = document.getElementById('message_div').scrollHeight;
+        });
+        ///////////////////// pusher method to read incoming messages above /////////////////////////////
+
+        /////////////////////////////////// Form ajax submission code below ////////////////////////////////////
+        $('#send_message_form').on('submit', function() {
+            var formData = new FormData(this);
+            var headers_obj = {"Authorization":"Bearer <?php echo '1234567890'; /*@$_COOKIE['jwt_token_website'];*/ ?>"};
+            $.ajax({
+                url: "pusher.php",
+                type: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
+                headers:headers_obj,
+                success: function(data) {
+                    // console.log(data);
+                    // if (data.response == 'success') {
+                        document.getElementById('message_input').value='';
+                    // }
+                    // if (data.response == 'failure') {
+                    //     // write code for failure condition
+                    // }
+                },
+                error: function() {
+                    alert('Some Error Occured.');
+                }
+            });
+            return false;
+        });
+        /////////////////////////////////// Form ajax submission code above ////////////////////////////////////   
+
+        
+    </script>
+</body>
+</html>
