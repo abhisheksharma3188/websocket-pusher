@@ -22,13 +22,13 @@
     <script>
 
         ///////////////////// code to create pusher object below /////////////////////////////
-        var pusher = new Pusher("1d2dbaa7e24fbbc414ff", {
-        cluster: "ap2",
+        var pusher = new Pusher("APP_KEY", {
+            cluster: "APP_CLUSTER",
         });
         ///////////////////// code to create pusher object above /////////////////////////////
 
         ///////////////////// pusher method to subscribe channel below /////////////////////////////
-        var channel = pusher.subscribe("pusher_chat_app");
+        var channel = pusher.subscribe("my-channel");
         ///////////////////// pusher method to subscribe channel above /////////////////////////////
 
         ///////////////////// pusher method to read incoming messages below /////////////////////////////
